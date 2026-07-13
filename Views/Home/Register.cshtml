@@ -1,0 +1,53 @@
+﻿<h2>Register</h2>
+
+<form asp-action="Register" method="post" id=>
+
+    <div>
+        <label asp-for="Name"></label><br />
+        <input asp-for="Name" />
+    </div>
+
+    <div>
+        <label asp-for="Email"></label><br />
+        <input asp-for="Email" />
+    </div>
+
+    <div>
+        <label>Gender</label><br />
+
+        <input asp-for="Gender" type="radio" value="Male" /> Male
+
+        <input asp-for="Gender" type="radio" value="Female" /> Female
+    </div>
+
+    <div>
+        <label asp-for="Age"></label><br />
+        <input asp-for="Age" type="number" />
+    </div>
+
+    <div>
+        <label asp-for="Address"></label><br />
+        <textarea asp-for="Address"></textarea>
+    </div>
+
+    <div>
+        <label asp-for="Username"></label><br />
+        <input asp-for="Username" />
+    </div>
+
+    <div>
+        <label asp-for="Password"></label><br />
+        <input asp-for="Password" type="password" />
+    </div>
+
+    <br />
+
+    <button type="submit">Register</button>
+
+</form>
+
+<p>
+    <a asp-controller="Account" asp-action="Login">
+        Already have an account? Login
+    </a>
+</p>

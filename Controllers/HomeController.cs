@@ -6,27 +6,30 @@ namespace Ninel_INFASS2.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public class AccountController : Controller
         {
-            _logger = logger;
-        }
+            [HttpGet]
+            public IActionResult Login()
+            {
+                return View();
+            }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+            [HttpGet]
+            public IActionResult Register()
+            {
+                return View();
+            }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            [HttpPost]
+            public IActionResult Register(RegisterModel model)
+            {
+                if (ModelState.IsValid)
+                {
+                    return RedirectToAction("Login");
+                }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                return View(model);
+            }
         }
     }
 }
