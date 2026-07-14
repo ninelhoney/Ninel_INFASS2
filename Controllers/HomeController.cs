@@ -7,7 +7,6 @@ namespace Ninel_INFASS2.Controllers
     public class HomeController : Controller
     {
         [HttpGet]
-        [Route("")]
         [Route("Index")]
         public IActionResult Index()
         {
@@ -52,6 +51,7 @@ namespace Ninel_INFASS2.Controllers
         //================ LOGIN ================
 
         [HttpGet]
+        [Route("")]
         [Route("Login")]
         public IActionResult Login()
         {
