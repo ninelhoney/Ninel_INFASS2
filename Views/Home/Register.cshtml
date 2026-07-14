@@ -1,53 +1,91 @@
-﻿<h2>Register</h2>
+﻿@model Ninel_INFASS2.Models.RegisterModel
 
-<form asp-action="Register" method="post" id=>
+@{
+    ViewData["Title"] = "Register";
+}
 
-    <div>
-        <label asp-for="Name"></label><br />
-        <input asp-for="Name" />
+<div class="container mt-5" style="max-width:650px;">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>Create Account</h2>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-action="Register" method="post">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" placeholder="example@email.com" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Gender</label><br />
+
+                    <div class="form-check form-check-inline">
+                        <input asp-for="Gender" class="form-check-input" type="radio" value="Male">
+                        <label class="form-check-label">Male</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input asp-for="Gender" class="form-check-input" type="radio" value="Female">
+                        <label class="form-check-label">Female</label>
+                    </div>
+
+                    <br />
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Age" class="form-label"></label>
+                    <input asp-for="Age" class="form-control" type="number" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label"></label>
+                    <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <button class="btn btn-primary w-100" type="submit">
+                    Register
+                </button>
+
+            </form>
+
+            <hr />
+
+            <p class="text-center">
+                Already have an account?
+                <a asp-action="Login">Login</a>
+            </p>
+
+        </div>
     </div>
+</div>
 
-    <div>
-        <label asp-for="Email"></label><br />
-        <input asp-for="Email" />
-    </div>
-
-    <div>
-        <label>Gender</label><br />
-
-        <input asp-for="Gender" type="radio" value="Male" /> Male
-
-        <input asp-for="Gender" type="radio" value="Female" /> Female
-    </div>
-
-    <div>
-        <label asp-for="Age"></label><br />
-        <input asp-for="Age" type="number" />
-    </div>
-
-    <div>
-        <label asp-for="Address"></label><br />
-        <textarea asp-for="Address"></textarea>
-    </div>
-
-    <div>
-        <label asp-for="Username"></label><br />
-        <input asp-for="Username" />
-    </div>
-
-    <div>
-        <label asp-for="Password"></label><br />
-        <input asp-for="Password" type="password" />
-    </div>
-
-    <br />
-
-    <button type="submit">Register</button>
-
-</form>
-
-<p>
-    <a asp-controller="Account" asp-action="Login">
-        Already have an account? Login
-    </a>
-</p>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
