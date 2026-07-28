@@ -29,7 +29,7 @@
             </div>
         </div>
     </nav>
-    <div id="homeContent">
+    <div id="homeContent" style="display:none;">
     <!-- Masthead-->
     <header class="masthead bg-primary text-white text-center">
         <div class="container-fluid px-4 d-flex align-items-center flex-column">
@@ -175,7 +175,7 @@
     </section>
     </div><!-- end homeContent -->
     <!-- Login Content (hidden by default) -->
-    <div id="loginContent" style="display:none;">
+    <div id="loginContent">
         <div class="glass-page">
             <!-- Login Form -->
             <div id="loginFormCard" class="glass-card">
@@ -281,29 +281,33 @@
                         Already have an account?
                         <a href="javascript:void(0)" id="showLogin" class="glass-link">Login</a>
                     </p>
+                </div>
+            </div>
 
-                    <!-- Users Table (inside register card, hidden until users exist) -->
-                    <div id="usersTableSection" style="display:none;">
-                        <hr class="glass-divider" />
-                        <h5 class="fw-bold text-secondary mb-3"><i class="fas fa-users me-2"></i>Registered Users</h5>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Gender</th>
-                                        <th>Age</th>
-                                        <th>Address</th>
-                                        <th>Username</th>
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="usersTableBody">
-                                </tbody>
-                            </table>
-                        </div>
+            <!-- Registered Users Table (separate card below register form) -->
+            <div id="usersTableSection" class="glass-card-wide mt-4" style="display:none;">
+                <div class="glass-header" style="background: linear-gradient(135deg, #34495e, #2c3e50);">
+                    <h2><i class="fas fa-users me-2"></i>Registered Users</h2>
+                    <p style="margin:0; font-size:0.9rem; opacity:0.7;">Manage all registered accounts.</p>
+                </div>
+                <div class="glass-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                    <th>Address</th>
+                                    <th>Username</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -674,34 +678,40 @@
                 }
                 $('#usersTableSection').show();
                 $.each(data, function (i, u) {
-                    tbody.append(
-                        '<tr>' +
-                        '<td>' + u.id + '</td>' +
-                        '<td>' + u.name + '</td>' +
-                        '<td>' + u.email + '</td>' +
-                        '<td>' + u.gender + '</td>' +
-                        '<td>' + u.age + '</td>' +
-                        '<td>' + u.address + '</td>' +
-                        '<td>' + u.username + '</td>' +
-                        '<td class="text-center"><div class="d-flex justify-content-center gap-1">' +
-                        '<button class="btn btn-sm btn-info text-white btn-view" data-id="' + u.id + '" title="View"><i class="fas fa-eye"></i></button>' +
-                        '<button class="btn btn-sm btn-warning text-white btn-edit" data-id="' + u.id + '" title="Edit"><i class="fas fa-edit"></i></button>' +
-                        '<button class="btn btn-sm btn-danger btn-delete" data-id="' + u.id + '" data-name="' + u.name + '" title="Delete"><i class="fas fa-trash"></i></button>' +
-                        '</div></td></tr>'
-                    );
+                    var row = '<tr>';
+                    row += '<td>' + u.id + '</td>';
+                    row += '<td>' + u.name + '</td>';
+                    row += '<td>' + u.email + '</td>';
+                    row += '<td>' + u.gender + '</td>';
+                    row += '<td>' + u.age + '</td>';
+                    row += '<td>' + u.address + '</td>';
+                    row += '<td>' + u.username + '</td>';
+                    row += '<td class="text-center">';
+                    row += '<div class="d-flex justify-content-center gap-1">';
+                    row += '<button class="btn btn-sm btn-info text-white btn-view" data-id="' + u.id + '"><i class="fas fa-eye"></i></button>';
+                    row += '<button class="btn btn-sm btn-warning text-white btn-edit" data-id="' + u.id + '"><i class="fas fa-edit"></i></button>';
+                    row += '<button class="btn btn-sm btn-danger btn-delete" data-id="' + u.id + '" data-name="' + u.name + '"><i class="fas fa-trash"></i></button>';
+                    row += '</div></td></tr>';
+                    tbody.append(row);
                 });
             });
         }
 
         function showRegisterAlert(msg, type) {
-            var alertDiv = $('#registerAlert');
-            alertDiv.removeClass('d-none alert-success alert-danger').addClass('alert-' + type).text(msg);
+            $('#registerAlert')
+                .removeClass('d-none alert-success alert-danger')
+                .addClass('alert-' + type)
+                .text(msg);
         }
 
         function clearRegisterForm() {
             $('#regId').val(0);
             $('#regName, #regEmail, #regAge, #regAddress, #regUsername, #regPassword').val('');
             $('input[name="Gender"]').prop('checked', false);
+        }
+
+        function closeModal(id) {
+            bootstrap.Modal.getInstance(document.getElementById(id)).hide();
         }
 
         $(function () {
@@ -713,6 +723,7 @@
                 $('#loginContent').show();
                 $('#loginFormCard').show();
                 $('#registerFormCard').hide();
+                $('#usersTableSection').hide();
                 window.scrollTo(0, 0);
             });
 
@@ -730,45 +741,43 @@
 
             $('#showLogin').on('click', function () {
                 $('#registerFormCard').hide();
+                $('#usersTableSection').hide();
                 $('#loginFormCard').show();
                 window.scrollTo(0, 0);
             });
 
-            // AJAX Register - show confirmation first
-            var pendingRegisterData = null;
+            var pendingData = null;
 
             $('#registerForm').on('submit', function (e) {
                 e.preventDefault();
-                var gender = $('input[name="Gender"]:checked').val();
-                pendingRegisterData = {
+                pendingData = {
                     Id: parseInt($('#regId').val()) || 0,
                     Name: $('#regName').val(),
                     Email: $('#regEmail').val(),
-                    Gender: gender || '',
+                    Gender: $('input[name="Gender"]:checked').val() || '',
                     Age: parseInt($('#regAge').val()) || 0,
                     Address: $('#regAddress').val(),
                     Username: $('#regUsername').val(),
                     Password: $('#regPassword').val()
                 };
-                $('#confirmName').text(pendingRegisterData.Name);
-                $('#confirmEmail').text(pendingRegisterData.Email);
-                $('#confirmGender').text(pendingRegisterData.Gender || 'Not selected');
-                $('#confirmAge').text(pendingRegisterData.Age || 'Not specified');
-                $('#confirmAddress').text(pendingRegisterData.Address || 'Not specified');
-                $('#confirmUsername').text(pendingRegisterData.Username);
+                $('#confirmName').text(pendingData.Name);
+                $('#confirmEmail').text(pendingData.Email);
+                $('#confirmGender').text(pendingData.Gender || 'Not selected');
+                $('#confirmAge').text(pendingData.Age || 'Not specified');
+                $('#confirmAddress').text(pendingData.Address || 'Not specified');
+                $('#confirmUsername').text(pendingData.Username);
                 new bootstrap.Modal('#confirmRegisterModal').show();
             });
 
-            // Confirm and insert
             $('#btnConfirmRegister').on('click', function () {
-                if (!pendingRegisterData) return;
+                if (!pendingData) return;
                 $.ajax({
                     url: '/Home/RegisterAjax',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify(pendingRegisterData),
+                    data: JSON.stringify(pendingData),
                     success: function (res) {
-                        bootstrap.Modal.getInstance(document.getElementById('confirmRegisterModal')).hide();
+                        closeModal('confirmRegisterModal');
                         if (res.success) {
                             showRegisterAlert(res.message, 'success');
                             clearRegisterForm();
@@ -776,63 +785,50 @@
                         } else {
                             showRegisterAlert(res.message, 'danger');
                         }
-                        pendingRegisterData = null;
-                    },
-                    error: function () {
-                        bootstrap.Modal.getInstance(document.getElementById('confirmRegisterModal')).hide();
-                        showRegisterAlert('An error occurred. Please try again.', 'danger');
-                        pendingRegisterData = null;
+                        pendingData = null;
                     }
                 });
             });
 
-            // View User
             $(document).on('click', '.btn-view', function () {
-                var id = $(this).data('id');
-                $.getJSON('/Home/GetUser/' + id, function (u) {
-                    if (u) {
-                        $('#viewId').text(u.id);
-                        $('#viewName').text(u.name);
-                        $('#viewEmail').text(u.email);
-                        $('#viewGender').text(u.gender);
-                        $('#viewAge').text(u.age);
-                        $('#viewAddress').text(u.address);
-                        $('#viewUsername').text(u.username);
-                        new bootstrap.Modal('#viewUserModal').show();
-                    }
+                $.getJSON('/Home/GetUser/' + $(this).data('id'), function (u) {
+                    if (!u) return;
+                    $('#viewId').text(u.id);
+                    $('#viewName').text(u.name);
+                    $('#viewEmail').text(u.email);
+                    $('#viewGender').text(u.gender);
+                    $('#viewAge').text(u.age);
+                    $('#viewAddress').text(u.address);
+                    $('#viewUsername').text(u.username);
+                    new bootstrap.Modal('#viewUserModal').show();
                 });
             });
 
-            // Edit User
             $(document).on('click', '.btn-edit', function () {
-                var id = $(this).data('id');
-                $.getJSON('/Home/GetUser/' + id, function (u) {
-                    if (u) {
-                        $('#editId').val(u.id);
-                        $('#editName').val(u.name);
-                        $('#editEmail').val(u.email);
-                        $('#editAge').val(u.age);
-                        $('#editAddress').val(u.address);
-                        $('#editUsername').val(u.username);
-                        $('#editPassword').val('');
-                        if (u.gender === 'Male') {
-                            $('#editGenderMale').prop('checked', true);
-                        } else {
-                            $('#editGenderFemale').prop('checked', true);
-                        }
-                        new bootstrap.Modal('#editUserModal').show();
+                $.getJSON('/Home/GetUser/' + $(this).data('id'), function (u) {
+                    if (!u) return;
+                    $('#editId').val(u.id);
+                    $('#editName').val(u.name);
+                    $('#editEmail').val(u.email);
+                    $('#editAge').val(u.age);
+                    $('#editAddress').val(u.address);
+                    $('#editUsername').val(u.username);
+                    $('#editPassword').val('');
+                    if (u.gender === 'Male') {
+                        $('#editGenderMale').prop('checked', true);
+                    } else {
+                        $('#editGenderFemale').prop('checked', true);
                     }
+                    new bootstrap.Modal('#editUserModal').show();
                 });
             });
 
-            // Update User
             $('#btnUpdateUser').on('click', function () {
-                var gender = $('input[name="EditGender"]:checked').val();
                 var data = {
                     Id: parseInt($('#editId').val()),
                     Name: $('#editName').val(),
                     Email: $('#editEmail').val(),
-                    Gender: gender || '',
+                    Gender: $('input[name="EditGender"]:checked').val() || '',
                     Age: parseInt($('#editAge').val()) || 0,
                     Address: $('#editAddress').val(),
                     Username: $('#editUsername').val(),
@@ -845,7 +841,7 @@
                     data: JSON.stringify(data),
                     success: function (res) {
                         if (res.success) {
-                            bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
+                            closeModal('editUserModal');
                             loadUsers();
                         } else {
                             alert(res.message);
@@ -854,7 +850,6 @@
                 });
             });
 
-            // Delete User
             $(document).on('click', '.btn-delete', function () {
                 $('#deleteId').val($(this).data('id'));
                 $('#deleteUserName').text('User: ' + $(this).data('name'));
@@ -862,14 +857,13 @@
             });
 
             $('#btnConfirmDelete').on('click', function () {
-                var id = $('#deleteId').val();
                 $.ajax({
                     url: '/Home/DeleteUser',
                     type: 'POST',
-                    data: { id: id },
+                    data: { id: $('#deleteId').val() },
                     success: function (res) {
                         if (res.success) {
-                            bootstrap.Modal.getInstance(document.getElementById('deleteUserModal')).hide();
+                            closeModal('deleteUserModal');
                             loadUsers();
                         } else {
                             alert(res.message);
