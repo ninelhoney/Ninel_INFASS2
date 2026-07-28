@@ -616,7 +616,7 @@ progress {
 }
 
     .blockquote-footer::before {
-        content: "— ";
+        content: "ï¿½ï¿½";
     }
 
 .img-fluid {
@@ -12658,4 +12658,161 @@ html {
 
 .copyright {
     background-color: #1a252f;
+}
+
+.glass-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 50%, #d5dce4 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 20px 40px;
+}
+
+.glass-card {
+    width: 100%;
+    max-width: 480px;
+    background: #fff;
+    border: none;
+    border-radius: 1.25rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transform: translateY(-10px);
+}
+
+.glass-card-wide {
+    width: 100%;
+    max-width: 620px;
+    background: #fff;
+    border: none;
+    border-radius: 1.25rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transform: translateY(-10px);
+}
+
+.glass-header {
+    padding: 1.5rem;
+    text-align: center;
+    color: #fff;
+}
+
+.glass-header h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    letter-spacing: 1px;
+}
+
+.glass-body {
+    padding: 2rem 2.5rem 2rem;
+}
+
+.glass-body .form-label {
+    color: #212529;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.35rem;
+}
+
+.glass-body .form-control {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    color: #212529;
+    padding: 0.6rem 0.9rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.glass-body .form-control::placeholder {
+    color: #6c757d;
+}
+
+.glass-body .form-control:focus {
+    background: #fff;
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(26, 188, 156, 0.25);
+    color: #212529;
+}
+
+.glass-body .form-check-input {
+    background-color: #dee2e6;
+    border-color: #adb5bd;
+}
+
+.glass-body .form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.glass-body .form-check-label {
+    color: #212529;
+}
+
+.glass-body textarea.form-control {
+    min-height: 80px;
+}
+
+.glass-btn {
+    width: 100%;
+    padding: 0.7rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.glass-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.glass-btn:active {
+    transform: translateY(0);
+}
+
+.glass-btn-primary {
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+}
+
+.glass-btn-success {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.glass-link {
+    color: var(--bs-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.glass-link:hover {
+    color: #16a085;
+    text-decoration: underline;
+}
+
+.glass-footer-text {
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.glass-footer-text a {
+    color: var(--bs-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.glass-footer-text a:hover {
+    color: #16a085;
+    text-decoration: underline;
+}
+
+.glass-divider {
+    border-top: 1px solid #dee2e6;
+    margin: 1.25rem 0;
 }

@@ -18,7 +18,6 @@
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">About</a>
                 </li>
-
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Contact</a>
                 </li>
@@ -26,14 +25,15 @@
         </div>
     </div>
 </nav>
-<div style="display:flex; justify-content:center; align-items:center; min-height:100vh; padding-top:90px; padding-bottom:20px;">
-<div class="card shadow-lg border-0 rounded-4" style="width:100%; max-width:500px;">
 
-        <div class="card-header bg-success text-white text-center">
-            <h2>Login</h2>
+<div class="glass-page">
+    <div class="glass-card">
+        <div class="glass-header" style="background: linear-gradient(135deg, #1abc9c, #16a085);">
+            <h2><i class="fas fa-sign-in-alt me-2"></i>Login</h2>
+            <p style="margin:0; font-size:0.9rem; opacity:0.7;">Welcome back! Please sign in.</p>
         </div>
 
-        <div class="card-body p-4">
+        <div class="glass-body">
 
             @if (TempData["Success"] != null)
             {
@@ -55,31 +55,29 @@
 
                 <div class="mb-3">
                     <label asp-for="Username" class="form-label"></label>
-                    <input asp-for="Username" class="form-control" placeholder="Username">
+                    <input asp-for="Username" class="form-control" placeholder="Enter your username">
                     <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
 
                 <div class="mb-4">
                     <label asp-for="Password" class="form-label"></label>
-                    <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password">
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
-                <button class="btn btn-success w-100">
-                    Login
+                <button class="glass-btn glass-btn-primary" type="submit">
+                    <i class="fas fa-arrow-right-to-bracket me-1"></i> Sign In
                 </button>
 
             </form>
 
-            <hr />
+            <hr class="glass-divider" />
 
-            <p class="text-center">
+            <p class="glass-footer-text">
                 Don't have an account?
-                <a asp-action="Register">Register Here</a>
+                <a asp-action="Register" class="glass-link">Register Here</a>
             </p>
 
         </div>
-
     </div>
-
 </div>

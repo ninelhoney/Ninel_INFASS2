@@ -30,82 +30,88 @@
         </div>
     </div>
 </nav>
-<div class="container d-flex justify-content-center py-5" style="margin-top:120px;">
-    <div class="card shadow-lg border-0 rounded-4" style="width:100%; max-width:500px;">
-        <div class="card-header bg-primary text-white text-center">
-            <h2>Create Account</h2>
+
+<div class="glass-page" style="padding-top: 180px;">
+    <div class="glass-card-wide">
+        <div class="glass-header" style="background: linear-gradient(135deg, #1abc9c, #16a085);">
+            <h2><i class="fas fa-user-plus me-2"></i>Create Account</h2>
+            <p style="margin:0; font-size:0.9rem; opacity:0.7;">Join us today! Fill in the details below.</p>
         </div>
 
-        <div class="card-body p-4">
+        <div class="glass-body">
 
             <form asp-action="Register" method="post">
 
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                <div class="mb-3">
-                    <label asp-for="Name" class="form-label"></label>
-                    <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email" class="form-control" placeholder="example@email.com" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Gender</label><br />
-
-                    <div class="form-check form-check-inline">
-                        <input asp-for="Gender" class="form-check-input" type="radio" value="Male">
-                        <label class="form-check-label">Male</label>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
 
-                    <div class="form-check form-check-inline">
-                        <input asp-for="Gender" class="form-check-input" type="radio" value="Female">
-                        <label class="form-check-label">Female</label>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" placeholder="example@email.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
-
-                    <br />
-                    <span asp-validation-for="Gender" class="text-danger"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Age" class="form-label"></label>
-                    <input asp-for="Age" class="form-control" type="number" />
-                    <span asp-validation-for="Age" class="text-danger"></span>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Gender</label>
+                        <div class="d-flex gap-4 mt-1">
+                            <div class="form-check">
+                                <input asp-for="Gender" class="form-check-input" type="radio" value="Male" id="genderMale">
+                                <label class="form-check-label" for="genderMale">Male</label>
+                            </div>
+                            <div class="form-check">
+                                <input asp-for="Gender" class="form-check-input" type="radio" value="Female" id="genderFemale">
+                                <label class="form-check-label" for="genderFemale">Female</label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Age" class="form-label"></label>
+                        <input asp-for="Age" class="form-control" type="number" placeholder="Enter your age" />
+                        <span asp-validation-for="Age" class="text-danger"></span>
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label asp-for="Address" class="form-label"></label>
-                    <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                    <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter your address"></textarea>
                     <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Username" class="form-label"></label>
-                    <input asp-for="Username" class="form-control" />
-                    <span asp-validation-for="Username" class="text-danger"></span>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Username" class="form-label"></label>
+                        <input asp-for="Username" class="form-control" placeholder="Choose a username" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Choose a password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
                 </div>
 
-                <div class="mb-4">
-                    <label asp-for="Password" class="form-label"></label>
-                    <input asp-for="Password" type="password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-
-                <button class="btn btn-primary w-100" type="button" id="btnRegister">
-                    Register
+                <button class="glass-btn glass-btn-primary" type="button" id="btnRegister">
+                    <i class="fas fa-user-plus me-1"></i> Create Account
                 </button>
 
             </form>
 
-            <hr />
+            <hr class="glass-divider" />
 
-            <p class="text-center">
+            <p class="glass-footer-text">
                 Already have an account?
-                <a asp-action="Login">Login</a>
+                <a asp-action="Login" class="glass-link">Login</a>
             </p>
 
         </div>
