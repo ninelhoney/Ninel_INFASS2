@@ -32,6 +32,7 @@
 </nav>
 
 <div class="glass-page" style="padding-top: 180px;">
+
     <div class="glass-card-wide">
         <div class="glass-header" style="background: linear-gradient(135deg, #1abc9c, #16a085);">
             <h2><i class="fas fa-user-plus me-2"></i>Create Account</h2>
@@ -40,9 +41,7 @@
 
         <div class="glass-body">
 
-            <form asp-action="Register" method="post">
-
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <form id="registerForm">
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -116,29 +115,115 @@
 
         </div>
     </div>
+
+    <div id="usersTableSection" class="glass-card-wide mt-4" style="display:none;">
+        <div class="glass-header" style="background: linear-gradient(135deg, #34495e, #2c3e50);">
+            <h2><i class="fas fa-users me-2"></i>Registered Users</h2>
+            <p style="margin:0; font-size:0.9rem; opacity:0.7;">List of registered accounts.</p>
+        </div>
+        <div class="glass-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Age</th>
+                            <th>Address</th>
+                            <th>Username</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
     <script>
+        function loadUsers() {
+            $.getJSON('/Home/GetUsers', function (data) {
+                var tbody = $('#usersTableBody');
+                tbody.empty();
+                if (data.length === 0) {
+                    $('#usersTableSection').hide();
+                    return;
+                }
+                $('#usersTableSection').show();
+                $.each(data, function (i, u) {
+                    var row = '<tr>';
+                    row += '<td>' + u.id + '</td>';
+                    row += '<td>' + u.name + '</td>';
+                    row += '<td>' + u.email + '</td>';
+                    row += '<td>' + u.gender + '</td>';
+                    row += '<td>' + u.age + '</td>';
+                    row += '<td>' + u.address + '</td>';
+                    row += '<td>' + u.username + '</td>';
+                    row += '</tr>';
+                    tbody.append(row);
+                });
+            });
+        }
+
         $(function () {
+            loadUsers();
+
+            $.validator.setDefaults({ ignore: [] });
+
             $("#btnRegister").click(function () {
-                var name = $("#Name").val();
-                var email = $("#Email").val();
+                var form = $("#registerForm");
+                form.validate();
+                if (!form.valid()) return;
+
+                var name = $("#Name").val().trim();
+                var email = $("#Email").val().trim();
                 var gender = $('input[name="Gender"]:checked').val();
-                var age = $("#Age").val();
-                var address = $("#Address").val();
-                var username = $("#Username").val();
-                var password = $("#Password").val();
+                var age = $("#Age").val().trim();
+                var address = $("#Address").val().trim();
+                var username = $("#Username").val().trim();
 
                 var msg = "Name: " + name + "\n" +
                           "Email: " + email + "\n" +
-                          "Gender: " + (gender || "Not selected") + "\n" +
+                          "Gender: " + gender + "\n" +
                           "Age: " + age + "\n" +
                           "Address: " + address + "\n" +
-                          "Username: " + username + "\n" +
-                          "Password: " + password;
+                          "Username: " + username;
 
-                alert(msg);
+                if (!confirm(msg + "\n\nPress OK to insert.")) return;
+
+                $.ajax({
+                    url: '/Home/RegisterAjax',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        Name: name,
+                        Email: email,
+                        Gender: gender,
+                        Age: parseInt(age),
+                        Address: address,
+                        Username: username,
+                        Password: $("#Password").val()
+                    }),
+                    success: function (res) {
+                        if (res.success) {
+                            alert("Successfully inserted!");
+                            $("#Name, #Email, #Age, #Address, #Username, #Password").val('');
+                            $('input[name="Gender"]').prop('checked', false);
+                            form.validate().resetForm();
+                            $('.field-validation-error').removeClass('field-validation-error').addClass('field-validation-valid');
+                            $('.input-validation-error').removeClass('input-validation-error');
+                            loadUsers();
+                        } else {
+                            alert(res.message);
+                        }
+                    }
+                });
             });
         });
     </script>
