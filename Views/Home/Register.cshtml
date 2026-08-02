@@ -1,4 +1,4 @@
-﻿@model Ninel_INFASS2.Models.RegisterModel
+﻿@model Ninel_INFASS2.Models.RegisterViewModel
 
 @{
     ViewData["Title"] = "Register";
@@ -21,11 +21,6 @@
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Contact</a>
                 </li>
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a asp-action="Login" class="nav-link py-3 px-0 px-lg-3 rounded">
-                        Login
-                    </a>
-                </li>
             </ul>
         </div>
     </div>
@@ -42,12 +37,13 @@
         <div class="glass-body">
 
             <form id="registerForm">
+                <input type="hidden" id="regId" value="0" />
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label asp-for="Name" class="form-label"></label>
-                        <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <label asp-for="FullName" class="form-label"></label>
+                        <input asp-for="FullName" class="form-control" placeholder="Enter your full name" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -101,7 +97,10 @@
                 </div>
 
                 <button class="glass-btn glass-btn-primary" type="button" id="btnRegister">
-                    <i class="fas fa-user-plus me-1"></i> Create Account
+                    <i class="fas fa-user-plus me-1"></i> <span id="regBtnText">Create Account</span>
+                </button>
+                <button class="glass-btn glass-btn-secondary" type="button" id="btnCancel" style="display:none;">
+                    <i class="fas fa-times me-1"></i> Cancel
                 </button>
 
             </form>
@@ -133,6 +132,7 @@
                             <th>Age</th>
                             <th>Address</th>
                             <th>Username</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="usersTableBody">
@@ -148,7 +148,7 @@
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
     <script>
         function loadUsers() {
-            $.getJSON('/Home/GetUsers', function (data) {
+            $.getJSON('/ViewAll', function (data) {
                 var tbody = $('#usersTableBody');
                 tbody.empty();
                 if (data.length === 0) {
@@ -159,16 +159,66 @@
                 $.each(data, function (i, u) {
                     var row = '<tr>';
                     row += '<td>' + u.id + '</td>';
-                    row += '<td>' + u.name + '</td>';
+                    row += '<td>' + u.fullName + '</td>';
                     row += '<td>' + u.email + '</td>';
                     row += '<td>' + u.gender + '</td>';
                     row += '<td>' + u.age + '</td>';
                     row += '<td>' + u.address + '</td>';
                     row += '<td>' + u.username + '</td>';
+                    row += '<td>';
+                    row += '<button class="btn btn-sm btn-warning me-1" onclick="editUser(' + u.id + ')" title="Edit"><i class="fas fa-edit"></i></button>';
+                    row += '<button class="btn btn-sm btn-danger" onclick="deleteUser(' + u.id + ')" title="Delete"><i class="fas fa-trash"></i></button>';
+                    row += '</td>';
                     row += '</tr>';
                     tbody.append(row);
                 });
             });
+        }
+
+        function editUser(id) {
+            $.getJSON('/GetUser', { id: id }, function (res) {
+                if (!res.id) { alert(res.message); return; }
+                $('#regId').val(res.id);
+                $('#FullName').val(res.fullName);
+                $('#Email').val(res.email);
+                $('input[name="Gender"]').prop('checked', false);
+                if (res.gender) $('input[name="Gender"][value="' + res.gender + '"]').prop('checked', true);
+                $('#Age').val(res.age);
+                $('#Address').val(res.address);
+                $('#Username').val(res.username);
+                $('#Password').val('');
+                $('#regBtnText').text('Update');
+                $('#btnCancel').show();
+                $('#usersTableSection').show();
+                window.scrollTo(0, 0);
+            });
+        }
+
+        function deleteUser(id) {
+            if (!confirm('Delete user #' + id + '?')) return;
+            $.ajax({
+                url: '/Delete',
+                type: 'POST',
+                data: { id: id },
+                success: function (res) {
+                    if (res.success) {
+                        alert(res.message);
+                        loadUsers();
+                    } else {
+                        alert(res.message);
+                    }
+                }
+            });
+        }
+
+        function resetForm() {
+            $('#registerForm')[0].reset();
+            $('#regId').val('0');
+            $('#regBtnText').text('Create Account');
+            $('#btnCancel').hide();
+            $('#registerForm').validate().resetForm();
+            $('.field-validation-error').removeClass('field-validation-error').addClass('field-validation-valid');
+            $('.input-validation-error').removeClass('input-validation-error');
         }
 
         $(function () {
@@ -181,49 +231,49 @@
                 form.validate();
                 if (!form.valid()) return;
 
-                var name = $("#Name").val().trim();
+                var id = parseInt($('#regId').val()) || 0;
+                var name = $("#FullName").val().trim();
                 var email = $("#Email").val().trim();
                 var gender = $('input[name="Gender"]:checked').val();
                 var age = $("#Age").val().trim();
                 var address = $("#Address").val().trim();
                 var username = $("#Username").val().trim();
+                var password = $("#Password").val();
 
-                var msg = "Name: " + name + "\n" +
-                          "Email: " + email + "\n" +
-                          "Gender: " + gender + "\n" +
-                          "Age: " + age + "\n" +
-                          "Address: " + address + "\n" +
-                          "Username: " + username;
-
-                if (!confirm(msg + "\n\nPress OK to insert.")) return;
+                var url = id === 0 ? '/Register' : '/Update?id=' + id;
+                var payload = {
+                    FullName: name,
+                    Email: email,
+                    Gender: gender,
+                    Age: parseInt(age),
+                    Address: address,
+                    Username: username
+                };
+                if (password) payload.Password = password;
 
                 $.ajax({
-                    url: '/Home/RegisterAjax',
+                    url: url,
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({
-                        Name: name,
-                        Email: email,
-                        Gender: gender,
-                        Age: parseInt(age),
-                        Address: address,
-                        Username: username,
-                        Password: $("#Password").val()
-                    }),
+                    data: JSON.stringify(payload),
                     success: function (res) {
                         if (res.success) {
-                            alert("Successfully inserted!");
-                            $("#Name, #Email, #Age, #Address, #Username, #Password").val('');
-                            $('input[name="Gender"]').prop('checked', false);
-                            form.validate().resetForm();
-                            $('.field-validation-error').removeClass('field-validation-error').addClass('field-validation-valid');
-                            $('.input-validation-error').removeClass('input-validation-error');
+                            if (id === 0) {
+                                showSqlAlert(res);
+                            } else {
+                                alert(res.message);
+                            }
+                            resetForm();
                             loadUsers();
                         } else {
                             alert(res.message);
                         }
                     }
                 });
+            });
+
+            $('#btnCancel').on('click', function () {
+                resetForm();
             });
         });
     </script>

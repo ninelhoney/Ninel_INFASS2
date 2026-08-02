@@ -52,3 +52,10 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
+
+function showSqlAlert(res) {
+    if (!res || !res.sql) {
+        return;
+    }
+    alert(res.sql);
+}
