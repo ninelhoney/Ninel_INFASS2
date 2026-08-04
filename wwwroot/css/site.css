@@ -12797,6 +12797,10 @@ html {
     background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
 
+.glass-btn + .glass-btn {
+    margin-top: 0.75rem;
+}
+
 .glass-link {
     color: var(--bs-primary);
     text-decoration: none;

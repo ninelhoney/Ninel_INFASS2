@@ -1,4 +1,6 @@
-﻿namespace Ninel_INFASS2.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Ninel_INFASS2.Models
 {
     public class User
     {
@@ -80,6 +82,7 @@
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;
+        [Range(15, 100, ErrorMessage = "Age must be between 15 and 100.")]
         public int Age { get; set; }
         public string Address { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;

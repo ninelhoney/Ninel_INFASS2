@@ -81,6 +81,9 @@ namespace Ninel_INFASS2.Controllers
         [HttpPost("Update")]
         public IActionResult Update([FromBody] RegisterViewModel model, int id)
         {
+            if (!ModelState.IsValid)
+                return Json(new { success = false, message = "Age must be between 15 and 100." });
+
             var existing = _users.FirstOrDefault(u => u.Id == id);
             if (existing == null)
                 return Json(new { success = false, message = "User not found." });

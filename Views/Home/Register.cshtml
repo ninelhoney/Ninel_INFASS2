@@ -71,7 +71,7 @@
 
                     <div class="col-md-6 mb-3">
                         <label asp-for="Age" class="form-label"></label>
-                        <input asp-for="Age" class="form-control" type="number" placeholder="Enter your age" />
+                        <input asp-for="Age" class="form-control" type="number" min="15" max="100" placeholder="Enter your age" />
                         <span asp-validation-for="Age" class="text-danger"></span>
                     </div>
                 </div>
@@ -260,6 +260,7 @@
                         if (res.success) {
                             if (id === 0) {
                                 showSqlAlert(res);
+                                alert('User successfully inserted.');
                             } else {
                                 alert(res.message);
                             }
